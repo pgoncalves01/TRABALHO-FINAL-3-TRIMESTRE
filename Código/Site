@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkFlow Studio - Sistema de Gestão</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --secondary: #F59E0B;
+            --dark: #1F2937;
+            --darker: #111827;
+            --light: #F9FAFB;
+            --gray: #6B7280;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .action-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .action-btn i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Forms */
+        .form-container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Tables */
+        .data-table {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.confirmed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--darker);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-palette"></i>
+            <span>InkFlow Studio</span>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#" class="active" onclick="showPage('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showPage('agendamentos')">Agendamentos</a></li>
+                <li><a href="#" onclick="showPage('clientes')">Clientes</a></li>
+                <li><a href="#" onclick="showPage('artistas')">Artistas</a></li>
+                <li><a href="#" onclick="showPage('tatuagens')">Tatuagens</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            
+            <!-- Página 1: Dashboard -->
+            <div id="dashboard" class="page active">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-value" id="statAgendamentos">12</div>
+                        <div class="stat-label">Agendamentos Hoje</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value" id="statClientes">247</div>
+                        <div class="stat-label">Clientes Ativos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value" id="statFaturamento">R$ 18.5k</div>
+                        <div class="stat-label">Faturamento Mensal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-value" id="statAvaliacao">4.8</div>
+                        <div class="stat-label">Avaliação Média</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="action-btn" onclick="showPage('agendamentos')">
+                        <i class="fas fa-plus-circle"></i>
+                        <div>Novo Agendamento</div>
+                    </div>
+                    <div class="action-btn" onclick="showPage('clientes')">
+                        <i class="fas fa-user-plus"></i>
+                        <div>Cadastrar Cliente</div>
+                    </div>
+                    <div class="action-btn" onclick="showPage('orcamentos')">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div>Emitir Orçamento</div>
+                    </div>
+                    <div class="action-btn" onclick="showPage('estoque')">
+                        <i class="fas fa-box-open"></i>
+                        <div>Controle de Estoque</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Próximos Agendamentos</h3>
+                        <button class="btn btn-primary" onclick="showPage('agendamentos')">
+                            <i class="fas fa-eye"></i> Ver Todos
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Artista</th>
+                                <th>Horário</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proximosAgendamentos">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Página 2: Agendamentos -->
+            <div id="agendamentos" class="page">
+                <h1 class="page-title">Agendamentos</h1>
+                
+                <div class="grid-2">
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 1.5rem;">Novo Agendamento</h3>
+                        <form id="formAgendamento">
+                            <div class="form-group">
+                                <label class="form-label">Cliente</label>
+                                <select class="form-control" id="clienteAgendamento" required>
+                                    <option value="">Selecione um cliente</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Artista</label>
+                                <select class="form-control" id="artistaAgendamento" required>
+                                    <option value="">Selecione um artista</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Data e Hora</label>
+                                <input type="datetime-local" class="form-control" id="dataAgendamento" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Descrição</label>
+                                <textarea class="form-control" id="descricaoAgendamento" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Agendar
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="data-table">
+                        <div class="table-header">
+                            <h3>Agendamentos do Dia</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Artista</th>
+                                    <th>Horário</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaAgendamentos">
+                                <!-- Dados serão preenchidos via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página 3: Clientes -->
+            <div id="clientes" class="page">
+                <h1 class="page-title">Clientes</h1>
+                
+                <div class="grid-2">
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 1.5rem;">Cadastrar Cliente</h3>
+                        <form id="formCliente">
+                            <div class="form-group">
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="nomeCliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="telefoneCliente">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailCliente">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Data de Nascimento</label>
+                                <input type="date" class="form-control" id="nascimentoCliente">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Cadastrar Cliente
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="data-table">
+                        <div class="table-header">
+                            <h3>Clientes Cadastrados</h3>
+                            <div>
+                                <input type="text" class="form-control" placeholder="Buscar cliente..." id="buscaCliente" style="width: 200px;">
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>Email</th>
+                                    <th>Última Visita</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaClientes">
+                                <!-- Dados serão preenchidos via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página 4: Artistas -->
+            <div id="artistas" class="page">
+                <h1 class="page-title">Artistas</h1>
+                
+                <div class="grid-2">
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 1.5rem;">Cadastrar Artista</h3>
+                        <form id="formArtista">
+                            <div class="form-group">
+                                <label class="form-label">Nome do Artista</label>
+                                <input type="text" class="form-control" id="nomeArtista" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Especialidade</label>
+                                <select class="form-control" id="especialidadeArtista">
+                                    <option value="">Selecione</option>
+                                    <option value="Realismo">Realismo</option>
+                                    <option value="Old School">Old School</option>
+                                    <option value="Pontilhismo">Pontilhismo</option>
+                                    <option value="Aquarela">Aquarela</option>
+                                    <option value="Tribal">Tribal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="telefoneArtista">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailArtista">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paint-brush"></i> Cadastrar Artista
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="data-table">
+                        <div class="table-header">
+                            <h3>Artistas Cadastrados</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Especialidade</th>
+                                    <th>Telefone</th>
+                                    <th>Agendamentos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaArtistas">
+                                <!-- Dados serão preenchidos via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página 5: Tatuagens -->
+            <div id="tatuagens" class="page">
+                <h1 class="page-title">Tatuagens</h1>
+                
+                <div class="form-container">
+                    <h3 style="margin-bottom: 1.5rem;">Registrar Tatuagem</h3>
+                    <form id="formTatuagem">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Agendamento</label>
+                                <select class="form-control" id="agendamentoTatuagem" required>
+                                    <option value="">Selecione um agendamento</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Local no Corpo</label>
+                                <input type="text" class="form-control" id="localTatuagem" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Descrição da Tatuagem</label>
+                            <textarea class="form-control" id="descricaoTatuagem" rows="3" required></textarea>
+                        </div>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label">Tamanho (cm)</label>
+                                <input type="text" class="form-control" id="tamanhoTatuagem">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Cores Utilizadas</label>
+                                <input type="text" class="form-control" id="coresTatuagem">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tempo de Execução</label>
+                                <input type="text" class="form-control" id="tempoTatuagem" placeholder="Ex: 3 horas">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Registrar Tatuagem
+                        </button>
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Histórico de Tatuagens</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Artista</th>
+                                <th>Descrição</th>
+                                <th>Local</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaTatuagens">
+                            <!-- Dados serão preenchidos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Páginas 6-15 (simplificadas para exemplo) -->
+            <div id="orcamentos" class="page">
+                <h1 class="page-title">Orçamentos</h1>
+                <div class="form-container">
+                    <h3>Novo Orçamento</h3>
+                    <p>Funcionalidade de orçamentos em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="pagamentos" class="page">
+                <h1 class="page-title">Pagamentos</h1>
+                <div class="form-container">
+                    <h3>Controle de Pagamentos</h3>
+                    <p>Funcionalidade de pagamentos em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="estoque" class="page">
+                <h1 class="page-title">Estoque</h1>
+                <div class="form-container">
+                    <h3>Controle de Estoque</h3>
+                    <p>Funcionalidade de estoque em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="fornecedores" class="page">
+                <h1 class="page-title">Fornecedores</h1>
+                <div class="form-container">
+                    <h3>Cadastro de Fornecedores</h3>
+                    <p>Funcionalidade de fornecedores em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="compras" class="page">
+                <h1 class="page-title">Compras</h1>
+                <div class="form-container">
+                    <h3>Controle de Compras</h3>
+                    <p>Funcionalidade de compras em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="fotos" class="page">
+                <h1 class="page-title">Galeria de Fotos</h1>
+                <div class="form-container">
+                    <h3>Upload de Fotos</h3>
+                    <p>Funcionalidade de galeria em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="avaliacoes" class="page">
+                <h1 class="page-title">Avaliações</h1>
+                <div class="form-container">
+                    <h3>Avaliações dos Clientes</h3>
+                    <p>Funcionalidade de avaliações em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="relatorios" class="page">
+                <h1 class="page-title">Relatórios</h1>
+                <div class="form-container">
+                    <h3>Relatórios do Sistema</h3>
+                    <p>Funcionalidade de relatórios em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <div id="configuracoes" class="page">
+                <h1 class="page-title">Configurações</h1>
+                <div class="form-container">
+                    <h3>Configurações do Sistema</h3>
+                    <p>Funcionalidade de configurações em desenvolvimento...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Sistema de Navegação
+        function showPage(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostra a página selecionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Atualiza menu ativo
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Atualiza dados específicos da página
+            if (pageId === 'dashboard') {
+                updateDashboard();
+            } else if (pageId === 'agendamentos') {
+                loadAgendamentos();
+            } else if (pageId === 'clientes') {
+                loadClientes();
+            } else if (pageId === 'artistas') {
+                loadArtistas();
+            } else if (pageId === 'tatuagens') {
+                loadTatuagens();
+            }
+        }
+
+        // Sistema de Dados
+        let dados = {
+            clientes: [
+                { id: 1, nome: "Ana Silva", telefone: "(11) 99999-9999", email: "ana@email.com", nascimento: "1990-05-15", ultimaVisita: "2024-12-15" },
+                { id: 2, nome: "João Pereira", telefone: "(11) 98888-8888", email: "joao@email.com", nascimento: "1985-08-20", ultimaVisita: "2024-12-14" }
+            ],
+            artistas: [
+                { id: 1, nome: "Carlos Santos", especialidade: "Realismo", telefone: "(11) 97777-7777", email: "carlos@studio.com", agendamentos: 15 },
+                { id: 2, nome: "Maria Oliveira", especialidade: "Old School", telefone: "(11) 96666-6666", email: "maria@studio.com", agendamentos: 12 }
+            ],
+            agendamentos: [
+                { id: 1, clienteId: 1, artistaId: 1, data: "2024-12-15T15:00", descricao: "Tatuagem dragão nas costas", status: "confirmado" },
+                { id: 2, clienteId: 2, artistaId: 2, data: "2024-12-15T16:30", descricao: "Tatuagem tribal no braço", status: "pendente" }
+            ],
+            tatuagens: [
+                { id: 1, agendamentoId: 1, descricao: "Dragão oriental", local: "Costas", tamanho: "30x40", cores: "Preto e cinza", tempo: "4 horas" }
+            ]
+        };
+
+        // Funções de Carregamento de Dados
+        function updateDashboard() {
+            document.getElementById('statAgendamentos').textContent = dados.agendamentos.length;
+            document.getElementById('statClientes').textContent = dados.clientes.length;
+            document.getElementById('statFaturamento').textContent = 'R$ ' + (dados.agendamentos.length * 500).toLocaleString();
+            document.getElementById('statAvaliacao').textContent = '4.8';
+
+            const tbody = document.getElementById('proximosAgendamentos');
+            tbody.innerHTML = '';
+            
+            dados.agendamentos.forEach(agendamento => {
+                const cliente = dados.clientes.find(c => c.id === agendamento.clienteId);
+                const artista = dados.artistas.find(a => a.id === agendamento.artistaId);
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${artista.nome}</td>
+                    <td>${new Date(agendamento.data).toLocaleString()}</td>
+                    <td><span class="status-badge ${agendamento.status}">${agendamento.status}</span></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editarAgendamento(${agendamento.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function loadAgendamentos() {
+            // Preenche selects
+            const selectCliente = document.getElementById('clienteAgendamento');
+            const selectArtista = document.getElementById('artistaAgendamento');
+            
+            selectCliente.innerHTML = '<option value="">Selecione um cliente</option>';
+            selectArtista.innerHTML = '<option value="">Selecione um artista</option>';
+            
+            dados.clientes.forEach(cliente => {
+                selectCliente.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
+            });
+            
+            dados.artistas.forEach(artista => {
+                selectArtista.innerHTML += `<option value="${artista.id}">${artista.nome}</option>`;
+            });
+
+            // Atualiza lista
+            const tbody = document.getElementById('listaAgendamentos');
+            tbody.innerHTML = '';
+            
+            dados.agendamentos.forEach(agendamento => {
+                const cliente = dados.clientes.find(c => c.id === agendamento.clienteId);
+                const artista = dados.artistas.find(a => a.id === agendamento.artistaId);
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${artista.nome}</td>
+                    <td>${new Date(agendamento.data).toLocaleString()}</td>
+                    <td><span class="status-badge ${agendamento.status}">${agendamento.status}</span></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editarAgendamento(${agendamento.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="cancelarAgendamento(${agendamento.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function loadClientes() {
+            const tbody = document.getElementById('listaClientes');
+            tbody.innerHTML = '';
+            
+            dados.clientes.forEach(cliente => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.telefone}</td>
+                    <td>${cliente.email}</td>
+                    <td>${cliente.ultimaVisita}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editarCliente(${cliente.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function loadArtistas() {
+            const tbody = document.getElementById('listaArtistas');
+            tbody.innerHTML = '';
+            
+            dados.artistas.forEach(artista => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${artista.nome}</td>
+                    <td>${artista.especialidade}</td>
+                    <td>${artista.telefone}</td>
+                    <td>${artista.agendamentos}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editarArtista(${artista.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function loadTatuagens() {
+            const selectAgendamento = document.getElementById('agendamentoTatuagem');
+            selectAgendamento.innerHTML = '<option value="">Selecione um agendamento</option>';
+            
+            dados.agendamentos.forEach(agendamento => {
+                const cliente = dados.clientes.find(c => c.id === agendamento.clienteId);
+                selectAgendamento.innerHTML += `<option value="${agendamento.id}">${cliente.nome} - ${new Date(agendamento.data).toLocaleDateString()}</option>`;
+            });
+
+            const tbody = document.getElementById('listaTatuagens');
+            tbody.innerHTML = '';
+            
+            dados.tatuagens.forEach(tatuagem => {
+                const agendamento = dados.agendamentos.find(a => a.id === tatuagem.agendamentoId);
+                const cliente = dados.clientes.find(c => c.id === agendamento.clienteId);
+                const artista = dados.artistas.find(a => a.id === agendamento.artistaId);
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${artista.nome}</td>
+                    <td>${tatuagem.descricao}</td>
+                    <td>${tatuagem.local}</td>
+                    <td>${new Date(agendamento.data).toLocaleDateString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Form Handlers
+        document.getElementById('formCliente').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const novoCliente = {
+                id: dados.clientes.length + 1,
+                nome: document.getElementById('nomeCliente').value,
+                telefone: document.getElementById('telefoneCliente').value,
+                email: document.getElementById('emailCliente').value,
+                nascimento: document.getElementById('nascimentoCliente').value,
+                ultimaVisita: new Date().toISOString().split('T')[0]
+            };
+            dados.clientes.push(novoCliente);
+            this.reset();
+            alert('Cliente cadastrado com sucesso!');
+            loadClientes();
+        });
+
+        document.getElementById('formArtista').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const novoArtista = {
+                id: dados.artistas.length + 1,
+                nome: document.getElementById('nomeArtista').value,
+                especialidade: document.getElementById('especialidadeArtista').value,
+                telefone: document.getElementById('telefoneArtista').value,
+                email: document.getElementById('emailArtista').value,
+                agendamentos: 0
+            };
+            dados.artistas.push(novoArtista);
+            this.reset();
+            alert('Artista cadastrado com sucesso!');
+            loadArtistas();
+        });
+
+        document.getElementById('formAgendamento').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const novoAgendamento = {
+                id: dados.agendamentos.length + 1,
+                clienteId: parseInt(document.getElementById('clienteAgendamento').value),
+                artistaId: parseInt(document.getElementById('artistaAgendamento').value),
+                data: document.getElementById('dataAgendamento').value,
+                descricao: document.getElementById('descricaoAgendamento').value,
+                status: 'pendente'
+            };
+            dados.agendamentos.push(novoAgendamento);
+            this.reset();
+            alert('Agendamento criado com sucesso!');
+            loadAgendamentos();
+        });
+
+        document.getElementById('formTatuagem').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const novaTatuagem = {
+                id: dados.tatuagens.length + 1,
+                agendamentoId: parseInt(document.getElementById('agendamentoTatuagem').value),
+                descricao: document.getElementById('descricaoTatuagem').value,
+                local: document.getElementById('localTatuagem').value,
+                tamanho: document.getElementById('tamanhoTatuagem').value,
+                cores: document.getElementById('coresTatuagem').value,
+                tempo: document.getElementById('tempoTatuagem').value
+            };
+            dados.tatuagens.push(novaTatuagem);
+            this.reset();
+            alert('Tatuagem registrada com sucesso!');
+            loadTatuagens();
+        });
+
+        // Funções Auxiliares
+        function editarAgendamento(id) {
+            alert(`Editando agendamento ${id}`);
+        }
+
+        function cancelarAgendamento(id) {
+            if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                dados.agendamentos = dados.agendamentos.filter(a => a.id !== id);
+                loadAgendamentos();
+                alert('Agendamento cancelado!');
+            }
+        }
+
+        function editarCliente(id) {
+            alert(`Editando cliente ${id}`);
+        }
+
+        function editarArtista(id) {
+            alert(`Editando artista ${id}`);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
