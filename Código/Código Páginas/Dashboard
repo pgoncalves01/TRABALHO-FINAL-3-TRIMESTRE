@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - InkFlow Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-palette"></i>
+                    <span>InkFlow Studio</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="artistas.html"><i class="fas fa-paint-brush"></i> Artistas</a></li>
+                <li><a href="tatuagens.html"><i class="fas fa-draw-polygon"></i> Tatuagens</a></li>
+                <li><a href="orcamentos.html"><i class="fas fa-file-invoice-dollar"></i> Orçamentos</a></li>
+                <li><a href="pagamentos.html"><i class="fas fa-money-bill-wave"></i> Pagamentos</a></li>
+                <li><a href="estoque.html"><i class="fas fa-boxes"></i> Estoque</a></li>
+                <li><a href="fornecedores.html"><i class="fas fa-truck"></i> Fornecedores</a></li>
+                <li><a href="compras.html"><i class="fas fa-shopping-cart"></i> Compras</a></li>
+                <li><a href="fotos.html"><i class="fas fa-images"></i> Fotos</a></li>
+                <li><a href="avaliacoes.html"><i class="fas fa-star"></i> Avaliações</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 class="page-title">Dashboard</h1>
+                <div class="user-menu">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">3</span>
+                    </div>
+                    <div class="user-avatar">AD</div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Agendamentos Hoje</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-value">247</div>
+                        <div class="stat-label">Clientes Ativos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-value">R$ 18.5k</div>
+                        <div class="stat-label">Faturamento Mensal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-star"></i></div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Avaliação Média</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="agendamentos.html?action=new" class="action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <div>Novo Agendamento</div>
+                    </a>
+                    <a href="clientes.html?action=new" class="action-btn">
+                        <i class="fas fa-user-plus"></i>
+                        <div>Cadastrar Cliente</div>
+                    </a>
+                    <a href="orcamentos.html?action=new" class="action-btn">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div>Emitir Orçamento</div>
+                    </a>
+                    <a href="estoque.html" class="action-btn">
+                        <i class="fas fa-box-open"></i>
+                        <div>Controle de Estoque</div>
+                    </a>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Próximos Agendamentos</h3>
+                        <a href="agendamentos.html" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> Ver Todos
+                        </a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Artista</th>
+                                <th>Horário</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ana Silva</td>
+                                <td>Carlos Santos</td>
+                                <td>15:00 - Hoje</td>
+                                <td><span class="status-badge confirmed">Confirmado</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="location.href='agendamentos.html?edit=1'">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>João Pereira</td>
+                                <td>Maria Oliveira</td>
+                                <td>16:30 - Hoje</td>
+                                <td><span class="status-badge pending">Pendente</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="location.href='agendamentos.html?edit=2'">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
